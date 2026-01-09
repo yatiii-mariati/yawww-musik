@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-   Schema::create('top10s', function (Blueprint $table) {
+       Schema::create('artists', function (Blueprint $table) {
     $table->id();
-    $table->foreignId('music_id')->constrained()->onDelete('cascade');
-    $table->integer('rank');
-    $table->year('year');
+    $table->string('name');
+    $table->text('bio')->nullable();
     $table->timestamps();
 });
+
+
     }
 
     /**
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('top10s');
+        Schema::dropIfExists('artists');
     }
 };

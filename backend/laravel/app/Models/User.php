@@ -5,42 +5,43 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Playlist; // ⬅️ WAJIB INI
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
-    /**
-     * Mass assignable attributes
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'photo',
+        'role',
     ];
 
-    /**
-     * Hidden attributes
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Attribute casting
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    // JWT
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     /**
-     * Relasi: User punya banyak favorite music
+     * RELATION: USER → PLAYLIST
      */
-    public function favorites()
+    public function playlists(): HasMany
     {
-        return $this->hasMany(Favorite::class);
+        return $this->hasMany(Playlist::class);
     }
 }
