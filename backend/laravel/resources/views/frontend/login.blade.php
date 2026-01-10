@@ -6,12 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
     <style>
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            background: linear-gradient(
+                90deg,
+                #5f7381 0%,
+                #3f5663 50%,
+                #1e2f38 100%
+            );
             display: flex;
             align-items: center;
             justify-content: center;
@@ -19,59 +27,82 @@
             color: white;
         }
 
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(
+                circle at center,
+                rgba(255,255,255,0.05),
+                rgba(0,0,0,0.35)
+            );
+            pointer-events: none;
+        }
+
         .login-box {
             width: 100%;
-            max-width: 420px;
-            background: rgba(0,0,0,.55);
-            backdrop-filter: blur(14px);
-            border-radius: 18px;
-            padding: 32px;
-            box-shadow: 0 30px 60px rgba(0,0,0,.6);
+            max-width: 440px;
+            background: rgba(15, 25, 30, 0.65);
+            backdrop-filter: blur(18px);
+            border-radius: 20px;
+            padding: 36px;
+            box-shadow: 0 30px 70px rgba(0,0,0,.6);
+            position: relative;
+            z-index: 1;
         }
 
         .login-box h3 {
             font-weight: 600;
-            margin-bottom: 24px;
+            margin-bottom: 26px;
             text-align: center;
+            letter-spacing: .5px;
         }
 
+        /* INPUT – TRANSPARENT */
         .form-control {
-            background: rgba(255,255,255,.1);
-            border: 1px solid rgba(255,255,255,.25);
-            color: white;
-            border-radius: 10px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #f2f6ff;
+            border-radius: 12px;
+            padding: 12px 14px;
         }
 
         .form-control::placeholder {
-            color: #cfd8ff;
+            color: rgba(230,235,255,0.6);
         }
 
         .form-control:focus {
-            background: rgba(255,255,255,.15);
+            background: rgba(255,255,255,0.16);
+            border-color: rgba(180,200,255,0.8);
             color: white;
-            border-color: #1DB954;
             box-shadow: none;
         }
 
         label {
             font-size: .85rem;
             color: #cfd8ff;
+            margin-bottom: 6px;
         }
 
+        /* BUTTON – BLUE GREY TRANSPARENT */
         .btn-login {
-            background: #1DB954;
-            border: none;
-            border-radius: 12px;
+            background: rgba(110, 140, 170, 0.65);
+            border: 1px solid rgba(160, 190, 220, 0.45);
+            border-radius: 14px;
             font-weight: 600;
-            padding: 10px;
+            padding: 12px;
+            color: #f4f8ff;
+            backdrop-filter: blur(8px);
+            transition: all .25s ease;
         }
 
         .btn-login:hover {
-            background: #1ed760;
+            background: rgba(130, 160, 195, 0.85);
+            transform: translateY(-1px);
         }
 
         a {
-            color: #1DB954;
+            color: #8fb4ff;
             text-decoration: none;
         }
 
@@ -79,12 +110,17 @@
             text-decoration: underline;
         }
 
+        hr {
+            border-color: rgba(255,255,255,0.15);
+        }
+
         .alert {
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: .9rem;
         }
     </style>
 </head>
+
 <body>
 
 <div class="login-box">
@@ -105,7 +141,6 @@
         </div>
     @endif
 
-    {{-- LOGIN FORM --}}
     <form method="POST" action="/login">
         @csrf
 
@@ -136,7 +171,7 @@
         </button>
     </form>
 
-    <hr class="my-4 border-secondary">
+    <hr class="my-4">
 
     <p class="text-center mb-0">
         Belum punya akun?

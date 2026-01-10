@@ -40,7 +40,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * RELATION: USER → PLAYLIST
      */
-    public function playlists(): HasMany
+    public function playlists()
     {
         return $this->hasMany(Playlist::class);
     }

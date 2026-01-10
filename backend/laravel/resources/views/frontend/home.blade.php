@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<title>Yaww Music</title>
+  <title>Yaww Music</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('storage/css/style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('storage/css/style.css') }}">
 </head>
 
 <body>
@@ -18,7 +18,6 @@
   <!-- ================= SIDEBAR ================= -->
   <aside class="sidebar">
 
-    <!-- PROFILE -->
     <div class="profile">
       <img src="{{ asset('storage/img/logo.jpg') }}">
       <div class="profile-info">
@@ -26,13 +25,12 @@
       </div>
     </div>
 
-    <!-- MENU -->
     <div class="menu">
-      <a href="http://127.0.0.1:8000/" class="active">🏠 Beranda</a>
-      <a href="http://127.0.0.1:8000/rekomendasi">✨ Rekomendasi</a>
-      <a href="http://127.0.0.1:8000/favorites">❤️ Favorit</a>
-      <a href="http://127.0.0.1:8000/login">🔐 Login</a>
-      <a href="http://127.0.0.1:8000/account">👤 Akun</a>
+      <a href="{{ url('/') }}" class="active">🏠 Beranda</a>
+      <a href="{{ url('/rekomendasi') }}">✨ Rekomendasi</a>
+      <a href="{{ url('/favorites') }}">❤️ Favorit</a>
+      <a href="{{ url('/login') }}">🔐 Login</a>
+      <a href="{{ url('/account') }}">👤 Akun</a>
     </div>
 
   </aside>
@@ -41,55 +39,54 @@
   <main class="content">
     <div class="content-inner">
 
-     <div class="topbar">
-      <input id="searchArtist" class="search" placeholder="Search artist...">
-    </div>
+      <!-- SEARCH -->
+      <div class="topbar mb-3">
+        <input id="searchArtist" class="search" placeholder="Search artist...">
+      </div>
 
+      <!-- ================= BANNER CAROUSEL ================= -->
+      <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+        <div class="carousel-inner rounded overflow-hidden">
 
+          <div class="carousel-item active">
+            <img
+              src="{{ asset('storage/img/yawwbanner.jpg') }}"
+              class="d-block w-100"
+              style="height:360px; object-fit:cover;"
+              alt="Banner 1">
+          </div>
+
+          <div class="carousel-item">
+            <img
+              src="{{ asset('storage/img/banner2.jpg') }}"
+              class="d-block w-100"
+              style="height:360px; object-fit:cover;"
+              alt="Banner 2">
+          </div>
+
+        </div>
+      </div>
 
       <!-- ================= ARTIST GRID ================= -->
-     
-
       <div class="main d-flex flex-wrap gap-4">
 
         @foreach ($artists as $artist)
-        <div class="audio"
-          data-artist-id="{{ $artist->id }}"
-          data-artist-image="{{ $artist->photo ? asset('storage/'.$artist->photo) : asset('storage/img/artist-default.png') }}">
+          <div class="audio"
+            data-artist-id="{{ $artist->id }}"
+            data-artist-image="{{ !empty($artist->photo) 
+              ? asset('storage/'.$artist->photo) 
+              : asset('img/artist-default.png') }}">
 
-          <img src="{{ $artist->photo ? asset('storage/'.$artist->photo) : asset('storage/img/artist-default.png') }}">
-          <h2>{{ $artist->name }}</h2>
-          <p>Artist</p>
+            <img
+              src="{{ !empty($artist->photo) 
+                ? asset('storage/'.$artist->photo) 
+                : asset('img/artist-default.png') }}">
 
-        </div>
+            <h2>{{ $artist->name }}</h2>
+            <p>Artist</p>
+          </div>
         @endforeach
 
-      </div>
-
-      <div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
-  <div class="carousel-inner rounded overflow-hidden">
-
-    <div class="carousel-item active">
-      <img
-        src="{{ asset('storage/img/yawwbanner.jpg') }}"
-        class="d-block w-100"
-        style="height:360px; object-fit:cover;"
-        alt="Banner 1">
-    </div>
-
-    <div class="carousel-item">
-      <img
-        src="{{ asset('storage/img/banner2.jpg') }}"
-        class="d-block w-100"
-        style="height:360px; object-fit:cover;"
-        alt="Banner 2">
-    </div>
-
-  </div>
-</div>
-
-
-        </div>
       </div>
 
     </div>

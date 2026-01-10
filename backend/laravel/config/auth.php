@@ -8,14 +8,9 @@ return [
     |--------------------------------------------------------------------------
     */
     'defaults' => [
-<<<<<<< HEAD
         'guard' => 'web',
         'passwords' => 'users',
     ],
-=======
-    'guard' => 'web',
-],
->>>>>>> 9355417c7faa822932c453e26ca20dc29b33da27
 
     /*
     |--------------------------------------------------------------------------
@@ -24,8 +19,7 @@ return [
     */
     'guards' => [
 
-<<<<<<< HEAD
-        // FRONTEND (SESSION / BLADE / PHP)
+        // FRONTEND (SESSION / BLADE)
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -36,20 +30,7 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
-=======
-    'web' => [
-        'driver' => 'session',
-        'provider' => 'users',
->>>>>>> 9355417c7faa822932c453e26ca20dc29b33da27
     ],
-
-    'api' => [
-        'driver' => 'jwt',
-        'provider' => 'users',
-    ],
-],
-
-
 
     /*
     |--------------------------------------------------------------------------
@@ -59,7 +40,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
         ],
     ],
 
@@ -71,7 +52,7 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],
@@ -82,6 +63,6 @@ return [
     | Password Confirmation Timeout
     |--------------------------------------------------------------------------
     */
-    'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
+    'password_timeout' => 10800,
 
 ];

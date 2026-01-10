@@ -30,6 +30,14 @@
 
         .header h2 {
             font-weight: 700;
+            margin: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         .action-buttons .btn {
@@ -50,6 +58,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 16px;
         }
 
         .artist-left {
@@ -69,6 +78,12 @@
         .artist-name {
             font-weight: 600;
             font-size: 1.05rem;
+        }
+
+        .artist-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .artist-actions .btn {
@@ -115,45 +130,50 @@
     {{-- HEADER --}}
     <div class="header">
         <h2>🎧 Admin Panel</h2>
+        <a href="{{ route('home') }}" class="btn btn-outline-light">
+            🏠 Home
+        </a>
+    </div>
 
-        <div class="action-buttons d-flex gap-2 flex-wrap">
-            <a href="/admin/songs/create" class="btn btn-success">
-                ➕ Tambah Lagu
-            </a>
+    {{-- ACTION BUTTONS --}}
+    <div class="action-buttons">
+        <a href="/admin/songs/create" class="btn btn-success">
+            ➕ Tambah Lagu
+        </a>
 
-            <a href="{{ route('admin.artists.create') }}" class="btn btn-primary">
-                ➕ Tambah Artis
-            </a>
+        <a href="{{ route('admin.artists.create') }}" class="btn btn-primary">
+            ➕ Tambah Artis
+        </a>
 
-            <a href="{{ route('admin.songs.index') }}" class="btn btn-warning">
-    🎵 Kelola Lagu
-            </a>
-        </div>
+        <a href="{{ route('admin.songs.index') }}" class="btn btn-warning">
+            🎵 Kelola Lagu
+        </a>
 
         <a href="{{ route('admin.rekomendasi') }}" class="btn btn-info">
-    ✨ Kelola Rekomendasi
-</a>
-
+            ✨ Kelola Rekomendasi
+        </a>
     </div>
 
     {{-- ARTIST LIST --}}
     <h5 class="mb-3">🎤 Daftar Artis</h5>
 
-    @if($artists->isEmpty())
+    @if ($artists->isEmpty())
         <p class="empty-text">Belum ada artis</p>
     @endif
 
-    @foreach($artists as $artist)
+    @foreach ($artists as $artist)
         <div class="glass-card">
 
             <div class="artist-item">
 
+                {{-- LEFT --}}
                 <div class="artist-left">
                     <img
                         src="{{ $artist->photo
                             ? asset('storage/'.$artist->photo)
                             : asset('storage/img/artist-default.png') }}"
                         class="artist-photo"
+                        alt="{{ $artist->name }}"
                     >
 
                     <div class="artist-name">
@@ -161,27 +181,25 @@
                     </div>
                 </div>
 
-                <div class="artist-actions d-flex gap-2">
+                {{-- ACTIONS --}}
+                <div class="artist-actions">
 
-                    {{-- DETAIL --}}
                     <a href="{{ route('admin.artists.show', $artist->id) }}"
                        class="btn btn-info btn-sm">
                         👁 Detail
                     </a>
 
-                    {{-- EDIT --}}
                     <a href="{{ route('admin.artists.edit', $artist->id) }}"
                        class="btn btn-outline-light btn-sm">
                         ✏️ Edit
                     </a>
 
-                    {{-- DELETE --}}
                     <form action="{{ route('admin.artists.destroy', $artist->id) }}"
                           method="POST"
                           onsubmit="return confirm('Yakin hapus artis ini?')">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger btn-sm">
+                        <button type="submit" class="btn btn-danger btn-sm">
                             🗑️ Hapus
                         </button>
                     </form>
