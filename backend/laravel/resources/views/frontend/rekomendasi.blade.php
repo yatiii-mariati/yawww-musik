@@ -33,8 +33,8 @@ body {
 }
 
 .rekom-card {
-  background: rgba(255,255,255,.10);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,.12);
+  backdrop-filter: blur(14px);
   border-radius: 18px;
   padding: 14px;
   box-shadow: 0 20px 40px rgba(0,0,0,.35);
@@ -71,6 +71,21 @@ body {
   opacity: .85;
   margin-top: 6px;
 }
+
+.play-btn {
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 12px;
+  background: rgba(110,140,170,.7);
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 8px;
+}
+
+.play-btn:hover {
+  background: rgba(130,160,195,.9);
+}
 </style>
 </head>
 
@@ -106,6 +121,15 @@ body {
               {{ $rek->deskripsi }}
             </div>
           @endif
+
+          @if($rek->song && $rek->song->audio_path)
+            <button
+              class="play-btn"
+              data-audio="{{ asset('storage/'.$rek->song->audio_path) }}"
+            >
+              ▶ Putar Lagu
+            </button>
+          @endif
         </div>
 
       </div>
@@ -113,6 +137,41 @@ body {
   </div>
 
 </div>
+
+<!-- AUDIO GLOBAL -->
+<audio id="audioPlayer"></audio>
+
+<script>
+const audio = document.getElementById('audioPlayer');
+let currentBtn = null;
+
+document.querySelectorAll('.play-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const src = btn.dataset.audio;
+
+    if (currentBtn === btn && !audio.paused) {
+      audio.pause();
+      btn.innerText = '▶ Putar Lagu';
+      return;
+    }
+
+    if (currentBtn) {
+      currentBtn.innerText = '▶ Putar Lagu';
+    }
+
+    audio.src = src;
+    audio.play();
+    btn.innerText = '⏸ Pause';
+    currentBtn = btn;
+  });
+});
+
+audio.addEventListener('ended', () => {
+  if (currentBtn) {
+    currentBtn.innerText = '▶ Putar Lagu';
+  }
+});
+</script>
 
 </body>
 </html>
