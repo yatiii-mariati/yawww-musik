@@ -33,7 +33,7 @@ class SongController extends Controller
     {
         return view('admin.songs.create', [
             'artists' => Artist::all(),
-            'genres'  => Genre::all()
+            
         ]);
     }
 
@@ -82,7 +82,7 @@ class SongController extends Controller
     {
         return view('admin.songs.edit', [
             'song'    => $song,
-            'genres'  => Genre::all()
+            
         ]);
     }
 

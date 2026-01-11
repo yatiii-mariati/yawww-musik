@@ -9,82 +9,155 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
+/* ================= ROOT ================= */
 body {
   min-height: 100vh;
-  background: linear-gradient(135deg, #6c7bd9, #1f2b4f);
+  background:
+    radial-gradient(circle at 10% 10%, rgba(120,140,255,.35), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(60,220,200,.25), transparent 45%),
+    linear-gradient(135deg, #0b1026, #1a2456);
   color: white;
-  font-family: system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
+  overflow-x: hidden;
 }
 
+/* ================= WRAPPER ================= */
 .rekom-wrapper {
-  padding: 40px;
+  padding: 60px 70px 140px;
 }
 
+/* ================= TITLE ================= */
 .rekom-title {
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin-bottom: 24px;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: .5px;
+  margin-bottom: 36px;
 }
 
+.rekom-title::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg,#7dd3fc,#34d399);
+}
+
+/* ================= GRID ================= */
 .rekom-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 32px;
 }
 
+/* ================= CARD ================= */
 .rekom-card {
-  background: rgba(255,255,255,.12);
-  backdrop-filter: blur(14px);
-  border-radius: 18px;
-  padding: 14px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.35);
-  transition: .25s;
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,.18),
+    rgba(255,255,255,.06)
+  );
+  backdrop-filter: blur(22px);
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow:
+    0 25px 60px rgba(0,0,0,.55),
+    inset 0 0 0 1px rgba(255,255,255,.15);
+  transition: all .35s ease;
+  overflow: hidden;
 }
 
 .rekom-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 35px 90px rgba(0,0,0,.75);
 }
 
+/* ================= IMAGE ================= */
 .rekom-img {
   width: 100%;
-  height: 200px;
-  border-radius: 14px;
+  height: 230px;
+  border-radius: 20px;
   object-fit: cover;
+  transition: transform .45s ease;
 }
 
+.rekom-card:hover .rekom-img {
+  transform: scale(1.1);
+}
+
+/* ================= INFO ================= */
 .rekom-info {
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 .rekom-info h5 {
+  font-size: 1.05rem;
+  font-weight: 700;
   margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
 }
 
 .rekom-info small {
-  color: #cfd8ff;
+  color: #c7d2fe;
+  font-size: .8rem;
 }
 
+/* ================= DESC ================= */
 .rekom-desc {
-  font-size: .85rem;
+  font-size: .82rem;
+  color: #e0e7ff;
   opacity: .85;
   margin-top: 6px;
+  line-height: 1.45;
 }
 
+/* ================= PLAY BUTTON ================= */
 .play-btn {
-  margin-top: 10px;
+  margin-top: 16px;
   width: 100%;
-  border-radius: 12px;
-  background: rgba(110,140,170,.7);
+  border-radius: 16px;
+  background: linear-gradient(135deg,#38bdf8,#22c55e);
   border: none;
-  color: white;
-  font-weight: 600;
-  padding: 8px;
+  color: #031019;
+  font-weight: 800;
+  padding: 10px;
+  transition: .25s;
+  box-shadow: 0 15px 40px rgba(56,189,248,.45);
 }
 
 .play-btn:hover {
-  background: rgba(130,160,195,.9);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 65px rgba(56,189,248,.75);
+}
+
+/* ================= DASHBOARD BUTTON ================= */
+.back-dashboard {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: rgba(15,23,42,.85);
+  backdrop-filter: blur(14px);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 20px 50px rgba(0,0,0,.6);
+  transition: .25s;
+  z-index: 999;
+}
+
+.back-dashboard:hover {
+  background: rgba(30,41,59,.95);
+  transform: translateY(-3px);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .rekom-wrapper {
+    padding: 40px 24px 140px;
+  }
 }
 </style>
 </head>
@@ -138,7 +211,12 @@ body {
 
 </div>
 
-<!-- AUDIO GLOBAL -->
+<!-- DASHBOARD -->
+<a href="{{ url('/') }}" class="back-dashboard">
+  ⬅ Dashboard
+</a>
+
+<!-- AUDIO -->
 <audio id="audioPlayer"></audio>
 
 <script>
