@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Artist extends Model
 {
-    protected $fillable = ['name', 'photo'];
+   protected $fillable = [
+    'name',
+    'photo',
+    'bio'
+];
+
 
     protected $appends = ['photo_url'];
 
@@ -16,8 +21,7 @@ class Artist extends Model
     }
 
     public function albums()
-{
-    return $this->hasMany(\App\Models\Album::class);
-}
-
+    {
+        return $this->hasMany(\App\Models\Album::class);
+    }
 }

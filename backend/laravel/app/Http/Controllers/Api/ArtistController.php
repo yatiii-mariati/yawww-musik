@@ -15,7 +15,7 @@ class ArtistController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => Artist::all()
+            'data' => Artist::latest()->get()
         ]);
     }
 
@@ -23,8 +23,15 @@ class ArtistController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'bio'  => 'nullable|string'
+            'bio'  => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
+
+        // Upload photo jika ada
+        if ($request->hasFile('photo')) {
+            $validated['photo'] =
+                $request->file('photo')->store('artists', 'public');
+        }
 
         $artist = Artist::create($validated);
 
@@ -35,14 +42,14 @@ class ArtistController extends Controller
         );
 
         Log::info('Artist created', [
-            'user_id' => JWTAuth::user()?->id,
+            'user_id'   => JWTAuth::user()?->id,
             'artist_id' => $artist->id
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Artist created successfully',
-            'data' => $artist
+            'data' => $artist->fresh()
         ], 201);
     }
 
@@ -62,13 +69,23 @@ class ArtistController extends Controller
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
+        // Upload photo jika ada
         if ($request->hasFile('photo')) {
+
             if ($artist->photo && Storage::disk('public')->exists($artist->photo)) {
                 Storage::disk('public')->delete($artist->photo);
             }
 
             $validated['photo'] =
                 $request->file('photo')->store('artists', 'public');
+        }
+
+        // Pastikan ada data yang diupdate
+        if (empty($validated)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang diubah'
+            ], 422);
         }
 
         $artist->update($validated);
@@ -82,12 +99,17 @@ class ArtistController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Artist updated successfully',
-            'data' => $artist
+            'data' => $artist->fresh() // ambil data terbaru dari DB
         ]);
     }
 
     public function destroy(Artist $artist)
     {
+        // Hapus foto jika ada
+        if ($artist->photo && Storage::disk('public')->exists($artist->photo)) {
+            Storage::disk('public')->delete($artist->photo);
+        }
+
         $artist->delete();
 
         activity_log(
@@ -125,7 +147,7 @@ class ArtistController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Artist photo updated successfully',
-            'data' => $artist
+            'data' => $artist->fresh()
         ]);
     }
 }
