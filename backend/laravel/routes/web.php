@@ -190,15 +190,18 @@ Route::middleware(['auth:web', 'admin'])
             return back()->with('success', 'Rekomendasi dihapus');
         })->name('rekomendasi.destroy');
 
-        /* ================= ARTIST ================= */
-        /* ================= ARTIST ================= */
+/* ================= ARTIST ================= */
 
 // FORM TAMBAH ARTIS
 Route::get('/artists/create', function () {
     return view('admin.create-artist');
 })->name('artists.create');
 
-// DETAIL ARTIS (INI YANG KURANG)
+// SIMPAN ARTIS
+Route::post('/artists', [AdminArtistController::class, 'store'])
+    ->name('artists.store');
+
+// DETAIL ARTIS
 Route::get('/artists/{artist}', function (Artist $artist) {
     $artist->load('albums.songs');
     return view('admin.artist-show', compact('artist'));
@@ -233,9 +236,10 @@ Route::delete('/artists/{artist}', function (Artist $artist) {
 
     $artist->delete();
 
-    return redirect('/admin')
+    return redirect()->route('admin.dashboard')
         ->with('success', 'Artis dan seluruh lagunya berhasil dihapus');
 })->name('artists.destroy');
+
 
 
         /* ================= ALBUM ================= */

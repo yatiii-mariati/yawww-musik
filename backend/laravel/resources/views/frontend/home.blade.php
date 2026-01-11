@@ -131,35 +131,43 @@
 </div>
 
 <!-- ================= MINI PLAYER ================= -->
-<div id="miniPlayer" class="fixed-bottom text-white d-none">
-  <div class="container py-2">
+<div id="miniPlayer" class="mini-player d-none">
+  <div class="mini-inner">
 
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="d-flex gap-2 align-items-center">
-        <img id="playerArtistImage" style="width:45px;height:45px;border-radius:8px">
-        <div>
-          <div id="playerTitle" class="fw-bold">Judul Lagu</div>
-          <small id="playerArtist" class="text-secondary">Artist</small>
-        </div>
+    <!-- LEFT : SONG INFO -->
+    <div class="mini-left">
+      <img id="playerArtistImage" src="">
+      <div class="mini-text">
+        <div id="playerTitle" class="mini-title">Judul Lagu</div>
+        <div id="playerArtist" class="mini-artist">Artist</div>
       </div>
-
-      <div class="d-flex gap-3">
-        <button id="prevBtn" class="btn btn-outline-light btn-sm">⏮</button>
-        <button id="playPauseBtn" class="btn btn-success btn-lg">⏯</button>
-        <button id="nextBtn" class="btn btn-outline-light btn-sm">⏭</button>
-      </div>
-
-      <button id="shuffleBtn" class="btn btn-outline-light btn-sm">🔀</button>
+      <span class="mini-like"></span>
     </div>
 
-    <div class="d-flex gap-2 align-items-center mt-2">
-      <small id="currentTime">0:00</small>
-      <input type="range" id="progressBar" min="0" max="100" value="0">
-      <small id="duration">0:00</small>
+    <!-- CENTER : CONTROLS -->
+    <div class="mini-center">
+      <div class="mini-controls">
+        <button id="shuffleBtn"></button>
+        <button id="prevBtn">⏮</button>
+        <button id="playPauseBtn" class="play">▶</button>
+        <button id="nextBtn">⏭</button>
+      </div>
+
+      <div class="mini-progress">
+        <span id="currentTime">0:00</span>
+        <input type="range" id="progressBar" min="0" max="100" value="0">
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="mini-right">
+      <span></span>
     </div>
 
   </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ asset('storage/js/player.js') }}"></script>

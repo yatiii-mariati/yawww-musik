@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Song; // ✅ WAJIB
 
 class Rekomendasi extends Model
 {
@@ -25,6 +26,6 @@ class Rekomendasi extends Model
      */
     public function song(): BelongsTo
     {
-        return $this->belongsTo(Song::class);
+        return $this->belongsTo(Song::class, 'song_id');
     }
 }

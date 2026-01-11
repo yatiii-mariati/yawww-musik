@@ -2,176 +2,227 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Admin • Daftar Lagu</title>
+<title>Admin • Music Library</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-body {
-  min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #1e293b 0%,
-    #0f172a 60%,
-    #020617 100%
+:root{
+  --bg:#020617;
+  --panel:#0b1228;
+  --glass:rgba(255,255,255,.08);
+  --primary:#60a5fa;
+  --accent:#22c55e;
+  --danger:#ef4444;
+  --text-muted:#94a3b8;
+}
+
+/* ================= BODY ================= */
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(96,165,250,.22), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(34,197,94,.18), transparent 50%),
+    linear-gradient(135deg,#020617,#0b1228 45%,#020617);
+  font-family:"Inter",system-ui,sans-serif;
+  color:white;
+}
+
+/* ================= LAYOUT ================= */
+.wrapper{
+  max-width:1200px;
+  margin:90px auto;
+  padding:0 24px;
+}
+
+/* ================= HEADER ================= */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:36px;
+}
+
+.header h1{
+  font-size:2rem;
+  font-weight:800;
+  letter-spacing:.4px;
+}
+
+.header span{
+  display:block;
+  font-size:.85rem;
+  color:var(--text-muted);
+  font-weight:500;
+}
+
+.back-btn{
+  padding:10px 22px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.35);
+  color:white;
+  text-decoration:none;
+  font-weight:600;
+  transition:.25s;
+}
+
+.back-btn:hover{
+  background:rgba(255,255,255,.12);
+}
+
+/* ================= PANEL ================= */
+.panel{
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.12),
+    rgba(255,255,255,.04)
   );
-  color: white;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  backdrop-filter:blur(28px);
+  border-radius:32px;
+  padding:30px;
+  box-shadow:
+    0 70px 160px rgba(0,0,0,.85),
+    inset 0 0 0 1px rgba(255,255,255,.1);
 }
 
-/* container */
-.admin-wrapper {
-  max-width: 1100px;
-  margin: 60px auto;
-  padding: 0 20px;
+/* ================= SONG CARD ================= */
+.song-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:22px 26px;
+  border-radius:22px;
+  background:rgba(255,255,255,.04);
+  margin-bottom:16px;
+  transition:.28s ease;
 }
 
-/* header */
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
+.song-card:hover{
+  background:rgba(255,255,255,.08);
+  transform:translateY(-4px);
 }
 
-.page-header h3 {
-  font-weight: 600;
+/* ================= LEFT ================= */
+.song-left{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
 }
 
-/* glass card */
-.glass-card {
-  background: rgba(255,255,255,.08);
-  backdrop-filter: blur(16px);
-  border-radius: 18px;
-  padding: 22px;
-  box-shadow: 0 30px 70px rgba(0,0,0,.6);
+.song-title{
+  font-weight:600;
+  font-size:1.05rem;
 }
 
-/* table */
-.table {
-  margin-bottom: 0;
+.song-meta{
+  display:flex;
+  gap:22px;
+  font-size:.85rem;
+  color:var(--text-muted);
 }
 
-.table thead th {
-  border-bottom: 1px solid rgba(255,255,255,.25);
-  color: #cbd5f5;
-  font-weight: 600;
+/* ================= RIGHT ================= */
+.song-action{
+  display:flex;
+  gap:10px;
 }
 
-.table tbody tr {
-  transition: .25s;
+.btn-delete{
+  background:rgba(239,68,68,.85);
+  border:none;
+  border-radius:14px;
+  padding:7px 18px;
+  color:white;
+  font-size:.85rem;
+  font-weight:600;
+  cursor:pointer;
 }
 
-.table tbody tr:hover {
-  background: rgba(255,255,255,.06);
+.btn-delete:hover{
+  background:#ef4444;
 }
 
-.table td {
-  vertical-align: middle;
+/* ================= EMPTY ================= */
+.empty{
+  text-align:center;
+  padding:60px 0;
+  color:var(--text-muted);
 }
 
-/* buttons */
-.btn-danger {
-  background: rgba(220,38,38,.85);
-  border: none;
-  border-radius: 10px;
-  padding: 4px 10px;
-}
-
-.btn-danger:hover {
-  background: rgba(239,68,68,.95);
-}
-
-.btn-outline-light {
-  border-radius: 12px;
-}
-
-/* empty */
-.empty-text {
-  color: #94a3b8;
-}
-
-/* alert */
-.alert {
-  border-radius: 12px;
+/* ================= ALERT ================= */
+.alert{
+  margin-bottom:26px;
+  padding:14px 18px;
+  border-radius:16px;
+  background:rgba(34,197,94,.18);
+  color:#d1fae5;
 }
 </style>
 </head>
 
 <body>
 
-<div class="admin-wrapper">
+<div class="wrapper">
 
   <!-- HEADER -->
-  <div class="page-header">
-    <h3>🎵 Daftar Lagu</h3>
-    <a href="/admin" class="btn btn-outline-light btn-sm">
+  <div class="header">
+    <div>
+      <h1>🎧 Music Library</h1>
+      <span>Administrative song management</span>
+    </div>
+
+    <a href="/admin" class="back-btn">
       ⬅ Dashboard
     </a>
   </div>
 
-  {{-- SUCCESS --}}
   @if(session('success'))
-    <div class="alert alert-success">
+    <div class="alert">
       {{ session('success') }}
     </div>
   @endif
 
-  <!-- TABLE CARD -->
-  <div class="glass-card">
+  <!-- PANEL -->
+  <div class="panel">
 
-    <div class="table-responsive">
-      <table class="table table-dark table-borderless align-middle">
+    @forelse($songs as $song)
+      <div class="song-card">
 
-        <thead>
-          <tr>
-            <th>Judul Lagu</th>
-            <th>Artis</th>
-            <th>Album</th>
-            <th class="text-center">Aksi</th>
-          </tr>
-        </thead>
+        <!-- LEFT -->
+        <div class="song-left">
+          <div class="song-title">
+            {{ $song->title }}
+          </div>
 
-        <tbody>
-        @forelse($songs as $song)
-          <tr>
-            <td>{{ $song->title }}</td>
+          <div class="song-meta">
+            <div>🎤 {{ $song->album->artist->name ?? '-' }}</div>
+            <div>💿 {{ $song->album->title ?? '-' }}</div>
+          </div>
+        </div>
 
-            <td class="text-secondary">
-              {{ $song->album->artist->name ?? '-' }}
-            </td>
+        <!-- RIGHT -->
+        <div class="song-action">
+          <form
+            action="{{ route('admin.songs.destroy', $song->id) }}"
+            method="POST"
+            onsubmit="return confirm('Yakin hapus lagu ini?')"
+          >
+            @csrf
+            @method('DELETE')
+            <button class="btn-delete">
+              🗑 Hapus
+            </button>
+          </form>
+        </div>
 
-            <td class="text-secondary">
-              {{ $song->album->title ?? '-' }}
-            </td>
-
-            <td class="text-center">
-              <form
-                action="{{ route('admin.songs.destroy', $song->id) }}"
-                method="POST"
-                onsubmit="return confirm('Yakin hapus lagu ini?')"
-                style="display:inline"
-              >
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-danger btn-sm">
-                  🗑 Hapus
-                </button>
-              </form>
-            </td>
-          </tr>
-        @empty
-          <tr>
-            <td colspan="4" class="text-center empty-text py-4">
-              Belum ada lagu
-            </td>
-          </tr>
-        @endforelse
-        </tbody>
-
-      </table>
-    </div>
+      </div>
+    @empty
+      <div class="empty">
+        Belum ada lagu
+      </div>
+    @endforelse
 
   </div>
 
