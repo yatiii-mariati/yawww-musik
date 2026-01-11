@@ -7,139 +7,85 @@ use App\Models\Rekomendasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-
 class RekomendasiController extends Controller
 {
     /* =========================
-       LIST REKOMENDASI
+       LIST
     ========================= */
     public function index()
     {
-        activity_log(
-            'VIEW',
-            'REKOMENDASI',
-            'Melihat daftar rekomendasi'
-        );
-
         return response()->json([
             'success' => true,
             'data' => Rekomendasi::all()
-        ], 200);
+        ]);
     }
 
     /* =========================
-       CREATE REKOMENDASI
+       CREATE
     ========================= */
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:100'
+            'judul' => 'required|string|max:150',
+            'artis' => 'required|string|max:100',
+            'deskripsi' => 'required|string'
         ]);
 
         $rekomendasi = Rekomendasi::create($data);
 
-        activity_log(
-            'CREATE',
-            'REKOMENDASI',
-            'Menambahkan rekomendasi: ' . $rekomendasi->name
-        );
-
         return response()->json([
             'success' => true,
-            'message' => 'Rekomendasi berhasil dibuat',
+            'message' => 'Rekomendasi berhasil ditambahkan',
             'data' => $rekomendasi
         ], 201);
     }
 
     /* =========================
-       DETAIL REKOMENDASI
+       DETAIL
     ========================= */
-    public function show(Rekomendasi $rekomendasi)
+    public function show($id)
     {
-        activity_log(
-            'VIEW',
-            'REKOMENDASI',
-            'Melihat rekomendasi ID ' . $rekomendasi->id
-        );
+        $rekomendasi = Rekomendasi::findOrFail($id);
 
         return response()->json([
             'success' => true,
             'data' => $rekomendasi
-        ], 200);
+        ]);
     }
 
     /* =========================
-       UPDATE REKOMENDASI
+       UPDATE
     ========================= */
-    public function update(Request $request, Rekomendasi $rekomendasi)
+    public function update(Request $request, $id)
     {
+        $rekomendasi = Rekomendasi::findOrFail($id);
+
         $data = $request->validate([
-            'name' => 'required|string|max:100'
+            'judul' => 'required|string|max:150',
+            'artis' => 'required|string|max:100',
+            'deskripsi' => 'required|string'
         ]);
 
         $rekomendasi->update($data);
-
-        activity_log(
-            'UPDATE',
-            'REKOMENDASI',
-            'Update rekomendasi ID ' . $rekomendasi->id
-        );
 
         return response()->json([
             'success' => true,
             'message' => 'Rekomendasi berhasil diperbarui',
             'data' => $rekomendasi
-        ], 200);
+        ]);
     }
 
     /* =========================
-       DELETE REKOMENDASI
+       DELETE
     ========================= */
-    public function destroy(Rekomendasi $rekomendasi)
+    public function destroy($id)
     {
-        $name = $rekomendasi->name;
-
+        $rekomendasi = Rekomendasi::findOrFail($id);
         $rekomendasi->delete();
-
-        activity_log(
-            'DELETE',
-            'REKOMENDASI',
-            'Hapus rekomendasi: ' . $name
-        );
 
         return response()->json([
             'success' => true,
             'message' => 'Rekomendasi berhasil dihapus'
-        ], 200);
+        ]);
     }
-
-    public function uploadPhoto(Request $request, Rekomendasi $rekomendasi)
-{
-    $request->validate([
-        'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
-
-    // hapus foto lama jika ada
-    if ($rekomendasi->photo && Storage::disk('public')->exists($rekomendasi->photo)) {
-        Storage::disk('public')->delete($rekomendasi->photo);
-    }
-
-    // simpan foto baru
-    $path = $request->file('photo')->store('rekomendasi', 'public');
-
-    $rekomendasi->update([
-        'photo' => $path
-    ]);
-
-    return response()->json([
-        'message' => 'Foto rekomendasi berhasil diupload',
-        'data' => [
-            'id' => $rekomendasi->id,
-            'photo' => $path,
-            'photo_url' => asset('storage/' . $path),
-        ]
-    ]);
 }
-
-}
-

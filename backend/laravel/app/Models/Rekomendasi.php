@@ -13,13 +13,11 @@ class Rekomendasi extends Model
 
     protected $table = 'rekomendasi';
 
-    protected $fillable = [
-        'song_id',
-        'judul',
-        'artis',
-        'photo',
-        'deskripsi',
-    ];
+  protected $fillable = [
+    'judul',
+    'artis',
+    'deskripsi'
+];
 
     /**
      * RELASI KE SONG
