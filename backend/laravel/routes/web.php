@@ -16,6 +16,7 @@ use App\Models\Rekomendasi;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ArtistController as AdminArtistController;
 use App\Http\Controllers\Admin\AlbumController;
+       use App\Http\Controllers\Admin\AdminRekomendasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,11 +79,33 @@ Route::post('/login', function (Request $request) {
 | REKOMENDASI (USER VIEW)
 |--------------------------------------------------------------------------
 */
+
+Route::middleware(['auth:web', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::get('/', fn () => view('admin.dashboard'))
+            ->name('dashboard');
+
+        // ================= REKOMENDASI (ADMIN) =================
+        Route::resource('rekomendasi', AdminRekomendasiController::class)
+            ->only(['index', 'store', 'destroy']);
+
+        // route admin lain di sini
+    });
+
+/*
+|--------------------------------------------------------------------------
+| REKOMENDASI (USER / FRONTEND)
+|--------------------------------------------------------------------------
+*/
 Route::get('/rekomendasi', function () {
     return view('frontend.rekomendasi', [
         'rekomendasis' => Rekomendasi::latest()->get(),
     ]);
 })->name('rekomendasi');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -147,61 +170,20 @@ Route::middleware(['auth:web', 'admin'])
             return back()->with('success', 'Lagu berhasil dihapus');
         })->name('songs.destroy');
 
-        /* ================= REKOMENDASI ================= */
-        Route::get('/rekomendasi', function () {
-            return view('admin.rekomendasi', [
-                'rekomendasis' => Rekomendasi::with('song')->latest()->get(),
-                'songs'        => Song::with('album.artist')->get(),
-            ]);
-        })->name('rekomendasi');
 
-        Route::post('/rekomendasi', function (Request $request) {
-
-            $request->validate([
-                'song_id'   => 'required|exists:songs,id',
-                'judul'     => 'required',
-                'artis'     => 'required',
-                'photo'     => 'nullable|image',
-                'deskripsi' => 'nullable',
-            ]);
-
-            $photo = $request->hasFile('photo')
-                ? $request->file('photo')->store('rekomendasi', 'public')
-                : null;
-
-            Rekomendasi::create([
-                'song_id'   => $request->song_id,
-                'judul'     => $request->judul,
-                'artis'     => $request->artis,
-                'photo'     => $photo,
-                'deskripsi' => $request->deskripsi,
-            ]);
-
-            return back()->with('success', 'Rekomendasi ditambahkan');
-        })->name('rekomendasi.store');
-
-        Route::delete('/rekomendasi/{rekomendasi}', function (Rekomendasi $rekomendasi) {
-
-            if ($rekomendasi->photo) {
-                Storage::disk('public')->delete($rekomendasi->photo);
-            }
-
-            $rekomendasi->delete();
-            return back()->with('success', 'Rekomendasi dihapus');
-        })->name('rekomendasi.destroy');
-
-/* ================= ARTIST ================= */
+        /* ================= ARTIST ================= */
+        /* ================= ARTIST ================= */
 
 // FORM TAMBAH ARTIS
 Route::get('/artists/create', function () {
     return view('admin.create-artist');
 })->name('artists.create');
 
-// SIMPAN ARTIS
+// SIMPAN ARTIS ✅
 Route::post('/artists', [AdminArtistController::class, 'store'])
     ->name('artists.store');
 
-// DETAIL ARTIS
+// DETAIL ARTIS (INI YANG KURANG)
 Route::get('/artists/{artist}', function (Artist $artist) {
     $artist->load('albums.songs');
     return view('admin.artist-show', compact('artist'));
@@ -236,10 +218,9 @@ Route::delete('/artists/{artist}', function (Artist $artist) {
 
     $artist->delete();
 
-    return redirect()->route('admin.dashboard')
+    return redirect('/admin')
         ->with('success', 'Artis dan seluruh lagunya berhasil dihapus');
 })->name('artists.destroy');
-
 
 
         /* ================= ALBUM ================= */

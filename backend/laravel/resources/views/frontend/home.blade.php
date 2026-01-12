@@ -63,6 +63,20 @@
               style="height:360px; object-fit:cover;"
               alt="Banner 2">
           </div>
+          <div class="carousel-item">
+            <img
+              src="{{ asset('storage/img/sza.jpg') }}"
+              class="d-block w-100"
+              style="height:360px; object-fit:cover;"
+              alt="Banner 2">
+          </div>
+          <div class="carousel-item">
+            <img
+              src="{{ asset('storage/img/banner.jpg') }}"
+              class="d-block w-100"
+              style="height:360px; object-fit:cover;"
+              alt="Banner 2">
+          </div>
 
         </div>
       </div>

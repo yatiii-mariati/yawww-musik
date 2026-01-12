@@ -200,12 +200,24 @@ body {
   <div class="glass">
 
     <!-- ACTION -->
-    <div class="action-buttons">
-      <a href="/admin/songs/create" class="btn btn-success">➕ Tambah Lagu</a>
-      <a href="{{ route('admin.artists.create') }}" class="btn btn-primary">➕ Tambah Artis</a>
-      <a href="{{ route('admin.songs.index') }}" class="btn btn-warning">🎵 Kelola Lagu</a>
-      <a href="{{ route('admin.rekomendasi') }}" class="btn btn-info">✨ Kelola Rekomendasi</a>
-    </div>
+<div class="action-buttons">
+  <a href="/admin/songs/create" class="btn btn-success">
+    ➕ Tambah Lagu
+  </a>
+
+  <a href="{{ route('admin.artists.create') }}" class="btn btn-primary">
+    ➕ Tambah Artis
+  </a>
+
+  <a href="{{ route('admin.songs.index') }}" class="btn btn-warning">
+    🎵 Kelola Lagu
+  </a>
+
+  <a href="{{ route('admin.rekomendasi.index') }}" class="btn btn-info">
+    ✨ Kelola Rekomendasi
+  </a>
+</div>
+
 
     <h5 class="mb-3 fw-semibold">🎤 Daftar Artis</h5>
 

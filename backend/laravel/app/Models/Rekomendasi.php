@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Song; // ✅ WAJIB
 
 class Rekomendasi extends Model
 {
@@ -13,17 +11,16 @@ class Rekomendasi extends Model
 
     protected $table = 'rekomendasi';
 
-  protected $fillable = [
-    'judul',
-    'artis',
-    'deskripsi'
-];
+    protected $fillable = [
+        'song_id',
+        'judul',
+        'artis',
+        'photo',
+        'deskripsi',
+    ];
 
-    /**
-     * RELASI KE SONG
-     */
-    public function song(): BelongsTo
+    public function song()
     {
-        return $this->belongsTo(Song::class, 'song_id');
+        return $this->belongsTo(Song::class);
     }
 }

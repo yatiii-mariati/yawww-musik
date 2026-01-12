@@ -12,11 +12,11 @@ class RekomendasiController extends Controller
     /* =========================
        LIST
     ========================= */
-    public function index()
+     public function index()
     {
         return response()->json([
             'success' => true,
-            'data' => Rekomendasi::all()
+            'data' => Rekomendasi::with('song')->latest()->get()
         ]);
     }
 
@@ -24,21 +24,23 @@ class RekomendasiController extends Controller
        CREATE
     ========================= */
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'judul' => 'required|string|max:150',
-            'artis' => 'required|string|max:100',
-            'deskripsi' => 'required|string'
-        ]);
+{
+    $data = $request->validate([
+        'song_id'   => 'required|exists:songs,id',
+        'judul'     => 'required|string|max:150',
+        'artis'     => 'required|string|max:100',
+        'deskripsi' => 'nullable|string',
+    ]);
 
-        $rekomendasi = Rekomendasi::create($data);
+    $rekomendasi = Rekomendasi::create($data);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Rekomendasi berhasil ditambahkan',
-            'data' => $rekomendasi
-        ], 201);
-    }
+    return response()->json([
+        'success' => true,
+        'message' => 'Rekomendasi berhasil ditambahkan',
+        'data' => $rekomendasi->load('song'),
+    ], 201);
+}
+
 
     /* =========================
        DETAIL
@@ -57,23 +59,25 @@ class RekomendasiController extends Controller
        UPDATE
     ========================= */
     public function update(Request $request, $id)
-    {
-        $rekomendasi = Rekomendasi::findOrFail($id);
+{
+    $rekomendasi = Rekomendasi::findOrFail($id);
 
-        $data = $request->validate([
-            'judul' => 'required|string|max:150',
-            'artis' => 'required|string|max:100',
-            'deskripsi' => 'required|string'
-        ]);
+    $data = $request->validate([
+        'song_id'   => 'required|exists:songs,id',
+        'judul'     => 'required|string|max:150',
+        'artis'     => 'required|string|max:100',
+        'deskripsi' => 'nullable|string',
+    ]);
 
-        $rekomendasi->update($data);
+    $rekomendasi->update($data);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Rekomendasi berhasil diperbarui',
-            'data' => $rekomendasi
-        ]);
-    }
+    return response()->json([
+        'success' => true,
+        'message' => 'Rekomendasi berhasil diperbarui',
+        'data' => $rekomendasi->load('song'),
+    ]);
+}
+
 
     /* =========================
        DELETE

@@ -9,18 +9,22 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
+    /**
+     * REGISTER USER
+     */
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
+            'name'     => 'required|string|max:100',
+            'email'    => 'required|email|unique:users',
             'password' => 'required|min:6'
         ]);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => bcrypt($request->password),
+            'role'     => 'user',
         ]);
 
         activity_log(
@@ -32,26 +36,42 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Register success',
-            'data' => $user
+            'data'    => [
+                'id'    => $user->id,
+                'name'  => $user->name,
+                'email' => $user->email,
+            ]
         ], 201);
     }
 
+    /**
+     * LOGIN USER
+     */
     public function login(Request $request)
 {
-    $credentials = $request->validate([
-        'email' => 'required|email',
+    $request->validate([
+        'email'    => 'required|email',
         'password' => 'required'
     ]);
 
-    if (! $token = JWTAuth::attempt($credentials)) {
+    $user = User::where('email', $request->email)->first();
+
+    if (! $user) {
         return response()->json([
             'success' => false,
-            'message' => 'Invalid credentials'
-        ], 401);
+            'message' => 'Email tidak terdaftar'
+        ], 404);
     }
 
-    // 🔥 AMBIL USER DARI TOKEN
-    $user = JWTAuth::setToken($token)->authenticate();
+    if (! $token = JWTAuth::attempt([
+        'email'    => $request->email,
+        'password' => $request->password
+    ])) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Password salah'
+        ], 401);
+    }
 
     activity_log(
         'LOGIN',
@@ -61,20 +81,33 @@ class AuthController extends Controller
 
     return response()->json([
         'success'    => true,
+        'message'    => 'Login success',
         'token'      => $token,
-        'token_type' => 'bearer'
+        'token_type' => 'bearer',
+        'user'       => [
+            'id'    => $user->id,
+            'name'  => $user->name,
+            'email' => $user->email,
+            'role'  => $user->role,
+        ]
     ]);
 }
 
 
+    /**
+     * GET CURRENT USER
+     */
     public function me()
     {
         return response()->json([
             'success' => true,
-            'data' => JWTAuth::user()
+            'data'    => JWTAuth::user()
         ]);
     }
 
+    /**
+     * LOGOUT USER
+     */
     public function logout()
     {
         JWTAuth::invalidate(JWTAuth::getToken());
